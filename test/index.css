@@ -1,0 +1,70 @@
+* {
+    box-sizing: border-box;
+}
+
+h1{
+    text-align: center;
+}
+
+.wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.container {
+    border: 1px solid;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.inputs {
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="tel"],
+input[type="number"] {
+
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Radio Buttons */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 1rem;
+    padding: 10px;
+}
+
+input[type="radio"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+select {
+    width: 100%; /* Makes it responsive */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
