@@ -1,8 +1,11 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
-h1{
+h1 {
     text-align: center;
 }
 
@@ -51,7 +54,8 @@ input[type="radio"] {
 }
 
 select {
-    width: 100%; /* Makes it responsive */
+    width: 100%;
+    /* Makes it responsive */
     padding: 10px;
     border-radius: 5px;
     background-color: white;
