@@ -1,12 +1,12 @@
 <?php
     session_start();
+    require_once "../config/database.php";
 
     $firstName = $lastname = $middleName = $dob = $gender = $civil_status = $nationality = $religion = $email = $tel = $number = $rm = $house = $street = $subdivision = $barangay = $city = $province = $countries = $zip = $rm_home = $house_home = $street_home = $subdivision_home = $barangay_home = $city_home = $province_home = $countries_home = $zip_home = $father_last_name = $father_first_name = $father_middle_name = $mother_last_name = $mother_first_name = $mother_middle_name = "";
     $lastNameError = $firstNameError = $middleNameError = $dobError = $genderError = $civil_statusError = $nationalityError = $religionError = $emailError = $telError = $numberError = $rmError = $houseError = $streetError = $subdivisionError = $barangayError = $cityError = $provinceError = $countriesError = $zipError = $rm_homeError = $house_homeError = $street_homeError = $subdivision_homeError = $barangay_homeError = $city_homeError = $province_homeError = $countries_homeError = $zip_homeError = $father_last_nameError = $father_first_nameError = $father_middle_nameError = $mother_last_nameError = $mother_first_nameError = $mother_middle_nameError = "";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $lastname  = trim($_POST["last_name"]);
-
         $firstName  = trim($_POST["first_name"]);
         $middleName = trim($_POST["middle_name"]);
         $dob        = $_POST["dob"];
@@ -44,7 +44,7 @@
         $isValid    = true;
 
         function hasMoreThanTwoSpaces($string) {
-            return substr_count($string, ' ') > 2;
+            return preg_match('/\s{2,}/', $string);
         }
 
         // First Name validation: Only letters and spaces allowed
@@ -388,46 +388,77 @@
 
         // If valid, store data in session and redirect
         if ($isValid) {
-            $_SESSION["lastname"]  = $lastname;
-            $_SESSION["firstName"]  = $firstName;
-            $_SESSION["middleName"] = $middleName;
-            $_SESSION["dob"]        = $dob;
-            $_SESSION["gender"] = $gender;
-            $_SESSION["civil_status"] = $civil_status;
-            $_SESSION["nationality"] = $nationality;
-            $_SESSION["religion"] = $religion;
-            $_SESSION["email"] = $email;
-            $_SESSION["tel"] = $tel;
-            $_SESSION["number"] = $number;
-            $_SESSION["rm"] = $rm;
-            $_SESSION["house"] = $house;
-            $_SESSION["street"] = $street;
-            $_SESSION["subdivision"] = $subdivision;
-            $_SESSION["barangay"] = $barangay;
-            $_SESSION["city"] = $city;
-            $_SESSION["province"] = $province;
-            $_SESSION["countries"] = $countries;
-            $_SESSION["zip"] = $zip;
-            $_SESSION["rm_home"] = $rm_home;
-            $_SESSION["house_home"] = $house_home;
-            $_SESSION["street_home"] = $street_home;
-            $_SESSION["subdivision_home"] = $subdivision_home;
-            $_SESSION["barangay_home"] = $barangay_home;
-            $_SESSION["city_home"] = $city_home;
-            $_SESSION["province_home"] = $province_home;
-            $_SESSION["countries_home"] = $countries_home;
-            $_SESSION["zip_home"] = $zip_home;
-            $_SESSION["father_last_name"] = $father_last_name;
-            $_SESSION["father_first_name"] = $father_first_name;
-            $_SESSION["father_middle_name"] = $father_middle_name;
-            $_SESSION["mother_last_name"] = $mother_last_name;
-            $_SESSION["mother_first_name"] = $mother_first_name;
-            $_SESSION["mother_middle_name"] = $mother_middle_name;
-            $_SESSION["age"]        = $age;
-            header("Location: result.php");
-            exit();
+            // Prepare and bind
+            $stmt = $conn->prepare("INSERT INTO users 
+                (first_name, middle_name, last_name, dob, gender, civil_status, nationality, religion, email, tel, phone_number, rm, house, street, subdivision, barangay, city, province, country, zip, 
+                rm_home, house_home, street_home, subdivision_home, barangay_home, city_home, province_home, country_home, zip_home, 
+                father_first_name, father_middle_name, father_last_name, mother_first_name, mother_middle_name, mother_last_name, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+            
+            if (!$stmt) {
+                echo "Prepare failed: (" . $conn->errno . ") " . $conn->error;
+                exit();
+            }
+        
+            // Assign values from $_POST
+            $firstName  = trim($_POST["first_name"] ?? '');
+            $middleName = trim($_POST["middle_name"] ?? '');
+            $lastname   = trim($_POST["last_name"] ?? '');
+            $dob        = $_POST["dob"] ?? '';
+            $gender     = $_POST["gender"] ?? '';
+            $civil_status = $_POST["civil_status"] ?? '';
+            $nationality = $_POST["nationality"] ?? '';
+            $religion    = $_POST["religion"] ?? '';
+            $email       = $_POST["email"] ?? '';
+            $tel         = $_POST["tel"] ?? '';
+            $number      = $_POST["number"] ?? '';
+            $rm          = $_POST["rm"] ?? '';
+            $house       = $_POST["house"] ?? '';
+            $street      = $_POST["street"] ?? '';
+            $subdivision = $_POST["subdivision"] ?? '';
+            $barangay    = $_POST["barangay"] ?? '';
+            $city        = $_POST["city"] ?? '';
+            $province    = $_POST["province"] ?? '';
+            $countries   = $_POST["countries"] ?? '';
+            $zip         = $_POST["zip"] ?? '';
+        
+            $rm_home       = $_POST["rm_home"] ?? '';
+            $house_home    = $_POST["house_home"] ?? '';
+            $street_home   = $_POST["street_home"] ?? '';
+            $subdivision_home = $_POST["subdivision_home"] ?? '';
+            $barangay_home = $_POST["barangay_home"] ?? '';
+            $city_home     = $_POST["city_home"] ?? '';
+            $province_home = $_POST["province_home"] ?? '';
+            $countries_home = $_POST["countries_home"] ?? '';
+            $zip_home      = $_POST["zip_home"] ?? '';
+        
+            $father_first_name = $_POST["father_first_name"] ?? '';
+            $father_middle_name = $_POST["father_middle_name"] ?? '';
+            $father_last_name = $_POST["father_last_name"] ?? '';
+            $mother_first_name = $_POST["mother_first_name"] ?? '';
+            $mother_middle_name = $_POST["mother_middle_name"] ?? '';
+            $mother_last_name = $_POST["mother_last_name"] ?? '';
+        
+            // Bind parameters AFTER assigning values
+            $stmt->bind_param(
+                "sssssssssssssssssssssssssssssssssss", 
+                $firstName, $middleName, $lastname, $dob, $gender, $civil_status, $nationality, $religion, $email, $tel, $number, 
+                $rm, $house, $street, $subdivision, $barangay, $city, $province, $countries, $zip, 
+                $rm_home, $house_home, $street_home, $subdivision_home, $barangay_home, $city_home, $province_home, $countries_home, $zip_home, 
+                $father_first_name, $father_middle_name, $father_last_name, 
+                $mother_first_name, $mother_middle_name, $mother_last_name
+            );
+        
+            if ($stmt->execute()) {
+                echo "<h1>Saved successfully</h1>";
+                exit();
+            } else {
+                $errors['database'] = "Error: " . $stmt->error;
+            }
+        
+            $stmt->close();
         }
-    }
+    }        
 ?>
 
 <!DOCTYPE html>
@@ -437,7 +468,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Form</title>
-    <link rel="stylesheet" href="../test/index.css">
+    <link rel="stylesheet" href="../css/index.css">
     <style>
     .error {
         color: red;
@@ -447,7 +478,7 @@
 </head>
 
 <body>
-    <form action="index.php" method="POST">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <div class="wrapper">
             <div class="container">
                 <h1>Personal Data</h1>
@@ -548,6 +579,7 @@
                 </div>
             </div>
 
+            <!-- place of birth -->
             <div class="container">
                 <h1>Place of Birth</h1>
                 <div class="inputs">
