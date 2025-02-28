@@ -1,4 +1,3 @@
-<?php include 'edit_modal.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,19 +52,29 @@
                         <td><?php echo ($birth_year); ?></td>
                         <td><?php echo $age; ?></td>  
                         <td>
-                            <div class="buttons">
-                                <button class="btn edit-btn" data-id="<?php echo $row['id']; ?>">
-                                    Edit
+                            <!-- <form action="edit_record.php" method="POST">
+                                <input type="hidden" name="user_id" value="<?php echo $row["id"]; ?>">
+                                <button type="submit" class="btn edit-btn">
+                                Edit
                                 </button>
+                            </form> -->
+                            <div class="action-buttons" style="display: flex; gap: 10px;">
+                                <button class="edit-btn btn">
+                                    <a class="dropdown-item d-flex align-items-center" href="edit_record.php?id=<?php echo $row['id']; ?>">
+                                        <i class="bi bi-pencil-fill me-2"></i>
+                                        Edit
+                                    </a>
+                                </button>
+
 
                                 <form action="delete_user.php" method="POST"
                                     onsubmit="return confirm('Are you sure?');">
                                     <input type="hidden" name="user_id" value="<?php echo $row["id"]; ?>">
                                     <button type="submit" class="btn delete-btn">
-                                        Delete
+                                    Delete
                                     </button>
                                 </form>
-                            </div>
+                            </div>          
                         </td>
                     </tr>
                     <?php endwhile; ?>
@@ -84,6 +93,4 @@
         $('#myTable').DataTable();
     });
 </script>
-
-
 </html>

@@ -1,6 +1,7 @@
 <?php
     session_start();
     require_once "../config/database.php";
+    require_once "validate.php";
 
     $firstName = $lastname = $middleName = $dob = $gender = $civil_status = $nationality = $religion = $email = $tel = $number = $rm = $house = $street = $subdivision = $barangay = $city = $province = $countries = $zip = $rm_home = $house_home = $street_home = $subdivision_home = $barangay_home = $city_home = $province_home = $countries_home = $zip_home = $father_last_name = $father_first_name = $father_middle_name = $mother_last_name = $mother_first_name = $mother_middle_name = "";
     $lastNameError = $firstNameError = $middleNameError = $dobError = $genderError = $civil_statusError = $nationalityError = $religionError = $emailError = $telError = $numberError = $rmError = $houseError = $streetError = $subdivisionError = $barangayError = $cityError = $provinceError = $countriesError = $zipError = $rm_homeError = $house_homeError = $street_homeError = $subdivision_homeError = $barangay_homeError = $city_homeError = $province_homeError = $countries_homeError = $zip_homeError = $father_last_nameError = $father_first_nameError = $father_middle_nameError = $mother_last_nameError = $mother_first_nameError = $mother_middle_nameError = "";
@@ -43,349 +44,20 @@
         $mother_middle_name = $_POST["mother_middle_name"];
         $isValid    = true;
 
-        function hasMoreThanTwoSpaces($string) {
-            return preg_match('/\s{2,}/', $string);
-        }
-
-        // First Name validation: Only letters and spaces allowed
-        if (empty($firstName)) {
-            $firstNameError = "First Name is required.";
-            $isValid        = false;
-        } elseif (! preg_match("/^[A-Za-z ]+$/", $firstName)) {
-            $firstNameError = "Only letters and spaces allowed.";
-            $isValid        = false;
-        }
-
-        // Middle Name validation: Only letters and spaces allowed
-        if (!empty($middleName) && ! preg_match("/^[A-Za-z ]+$/", $middleName)) {
-            $middleNameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-        }
-
-        // Last Name validation: Only letters and spaces allowed
-        if (empty($lastname)) {
-            $lastNameError = "Last Name is required.";
-            $isValid        = false;
-        } elseif (! preg_match("/^[A-Za-z ]+$/", $lastname) || (hasMoreThanTwoSpaces($lastname))) {
-            $lastNameError = "Invalid Last Name.";
-            $isValid        = false;
-        }
-
-        // First Name validation: Only letters and spaces allowed
-        if (empty($firstName)) {
-            $firstNameError = "First Name is required.";
-            $isValid        = false;
-        } elseif (! preg_match("/^[A-Za-z ]+$/", $firstName) || (hasMoreThanTwoSpaces($firstName))) {
-            $firstNameError = "Invalid First Name.";
-            $isValid        = false;
-        }
-        // Middle Name validation: Only letters and spaces allowed
-        if (!empty($middleName)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $middleName) || (hasMoreThanTwoSpaces($middleName))) {
-                $middleNameError = "Invalid Middle Name.";
-                $isValid         = false;
-            }
-        }
-
-        // Date of Birth validation
-        if (empty($dob)) {
-            $dobError = "Date of Birth is required.";
-            $isValid  = false;
-        } else {
-            $dobTimestamp = strtotime($dob);
-            $age          = (date("Y") - date("Y", $dobTimestamp));
-            if ($age < 18) {
-                $dobError = "You must be at least 18 years old.";
-                $isValid  = false;
-            }
-        }
-
-        // Gender Validation
-        if (empty($gender)) {
-            $genderError = "Gender is required.";
-            $isValid = false;
-        }
-
-        // Civil Status Validation
-        if (empty($civil_status)) {
-            $civil_statusError = "Civil Status is required.";
-            $isValid = false;
-        }
-
-        // Nationality Validation
-        if (empty($nationality)) {
-            $nationalityError = "Nationality is required.";
-            $isValid = false;
-        } elseif (! preg_match("/^[A-Za-z ]+$/", $nationality) || (hasMoreThanTwoSpaces($nationality))) {
-            $nationalityError = "Invalid Nationality.";
-            $isValid        = false;
-        }
-
-        // Religion Validation
-         if (!empty($religion)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $religion)) {
-                $religionError = "Religion is required.";
-                $isValid         = false;
-            } else if((hasMoreThanTwoSpaces($religion))){
-                $religionError = "Invalid Religion.";
-                $isValid = false;
-            }
-        }
-
-        // Email Validation
-        if (empty($email)) {
-            $emailError = "Email is required.";
-            $isValid = false;
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $emailError = "Invalid email format";
-            $isValid = false;
-        }
-
-        // Telephone Number Validation
-        if (!empty($tel)) {
-            if (!preg_match("/^[0-9]+$/", $tel)) {
-                $telError = "Only numbers are allowed.";
-                $isValid = false;
-            }
-        }
-
-        // Phone Number Validation
-        if (empty($number)) {
-            $numberError = "Phone number is required.";
-            $isValid = false;
-        } elseif (!preg_match("/^[0-9]+$/", $number)) {
-            $numberError = "Only numbers are allowed.";
-            $isValid = false;
-        }
-
-        // RM Validation
-        if (empty($rm)) {
-            $rmError = "RM is required.";
-            $isValid = false;
-        } else if (hasMoreThanTwoSpaces($rm)) {
-            $rmError = "Invalid RM.";
-            $isValid = false;
-        }
-
-        // House Validation
-        if (empty($house)) {
-            $houseError = "House is required.";
-            $isValid = false;
-        }  elseif (hasMoreThanTwoSpaces($house)) {
-            $houseError = "Invalid House.";
-            $isValid        = false;
-        }
-
-        // Street Validation
-        if (empty($street)) {
-            $streetError = "Street is required.";
-            $isValid = false;
-        }  elseif (hasMoreThanTwoSpaces($street)) {
-            $streetError = "Invalid Street.";
-            $isValid        = false;
-        }
-        // Subdivision Validation
-        if (!empty($subdivision)) {
-            if (hasMoreThanTwoSpaces($subdivision)) {
-            $subdivisionError = "Invalid Subdivision.";
-            $isValid        = false;
-            }
-        }
-
-        // Barangay Validation
-        if (!empty($barangay)) {
-            if (hasMoreThanTwoSpaces($barangay)) {
-            $barangayError = "Invalid Barangay.";
-            $isValid        = false;
-            }
-        }
-
-        // City Validation
-        if (!empty($city)) {
-            if (hasMoreThanTwoSpaces($city)) {
-            $cityError = "Invalid City.";
-            $isValid        = false;
-            }
-        }
-
-        // Province Validation
-        if (!empty($province)) {
-            if (hasMoreThanTwoSpaces($province)) {
-            $provinceError = "Invalid Province.";
-            $isValid        = false;
-            }
-        }
-
-        // Countries Validation
-        if (!empty($countries)) {
-            if (hasMoreThanTwoSpaces($countries)) {
-            $countriesError = "Invalid Country.";
-            $isValid        = false;
-            }
-        }
-
-        // Zip Validation
-        if (!empty($zip)) {
-            if (!preg_match("/^[0-9]+$/", $zip)) {
-            $zipError = "Only numbers are allowed.";
-            $isValid = false;
-            }
-        }
-
-        // RM Home Validation
-        if (empty($rm_home)) {
-            $rm_homeError = "RM is required.";
-            $isValid = false;
-        }  elseif (hasMoreThanTwoSpaces($rm_home)) {
-            $rm_homeError = "Invalid RM.";
-            $isValid        = false;
-        }
-
-        // House Home Validation
-        if (empty($house_home)) {
-            $house_homeError = "House is required.";
-            $isValid = false;
-        }  elseif (hasMoreThanTwoSpaces($house_home)) {
-            $house_homeError = "Invalid House.";
-            $isValid        = false;
-        }
-
-        // Street Home Validation
-        if (empty($street_home)) {
-            $street_homeError = "Street is required.";
-            $isValid = false;
-        }  elseif (hasMoreThanTwoSpaces($street_home)) {
-            $street_homeError = "Invalid Street.";
-            $isValid        = false;
-        }
-
-        // Subdivision Home Validation
-        if (!empty($subdivision_home)) {
-            if (hasMoreThanTwoSpaces($subdivision_home)) {
-            $subdivision_homeError = "Invalid Subdivision.";
-            $isValid        = false;
-            }
-        }
-
-        // Barangay Home Validation
-        if (!empty($barangay_home)) {
-            if (hasMoreThanTwoSpaces($barangay_home)) {
-            $barangay_homeError = "Invalid Barangay.";
-            $isValid        = false;
-            }
-        }
-
-        // City Home Validation
-        if (!empty($city_home)) {
-            if (hasMoreThanTwoSpaces($city_home)) {
-            $city_homeError = "Invalid City.";
-            $isValid        = false;
-            }
-        }
-
-        // Province Home Validation
-        if (!empty($province_home)) {
-            if (hasMoreThanTwoSpaces($province_home)) {
-            $province_homeError = "Invalid Province.";
-            $isValid        = false;
-            }
-        }
-
-        // Countries Home Validation
-        if (!empty($countries_home)) {
-            if (hasMoreThanTwoSpaces($countries_home)) {
-            $countries_homeError = "Invalid Country.";
-            $isValid        = false;
-            }
-        }
-
-        // Zip Home Validation
-        if (!empty($zip_home)) {
-            if (!preg_match("/^[0-9]+$/", $zip_home)) {
-            $zip_homeError = "Only numbers are allowed.";
-            $isValid = false;
-            }
-        }
-
-        // Father Last Name Validation
-        if (!empty($father_last_name)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $father_last_name)) {
-            $father_last_nameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-            } elseif (hasMoreThanTwoSpaces($father_last_name)) {
-            $father_last_nameError = "Invalid Last Name.";
-            $isValid        = false;
-            }
-        }
-
-        // Father First Name Validation
-        if (!empty($father_first_name)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $father_first_name)) {
-            $father_first_nameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-            } elseif (hasMoreThanTwoSpaces($father_first_name)) {
-            $father_first_nameError = "Invalid First Name.";
-            $isValid        = false;
-            }
-        }
-
-        // Father Middle Name Validation
-        if (!empty($father_middle_name)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $father_middle_name)) {
-            $father_middle_nameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-            } elseif (hasMoreThanTwoSpaces($father_middle_name)) {
-            $father_middle_nameError = "Invalid Middle Name.";
-            $isValid        = false;
-            }
-        }
-
-        // Mother Last Name Validation
-        if (!empty($mother_last_name)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $mother_last_name)) {
-            $mother_last_nameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-            } elseif (hasMoreThanTwoSpaces($mother_last_name)) {
-            $mother_last_nameError = "Invalid Last Name.";
-            $isValid        = false;
-            }
-        }
-
-        // Mother First Name Validation
-        if (!empty($mother_first_name)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $mother_first_name)) {
-            $mother_first_nameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-            } elseif (hasMoreThanTwoSpaces($mother_first_name)) {
-            $mother_first_nameError = "Invalid First Name.";
-            $isValid        = false;
-            }
-        }
-
-        // Mother Middle Name Validation
-        if (!empty($mother_middle_name)) {
-            if (! preg_match("/^[A-Za-z ]+$/", $mother_middle_name)) {
-            $mother_middle_nameError = "Only letters and spaces allowed.";
-            $isValid         = false;
-            } elseif (hasMoreThanTwoSpaces($mother_middle_name)) {
-            $mother_middle_nameError = "Invalid Middle Name.";
-            $isValid        = false;
-            }
-        }
-
-        // Date of Birth validation
-        if (empty($dob)) {
-            $dobError = "Date of Birth is required.";
-            $isValid  = false;
-        } else {
-            $dobTimestamp = strtotime($dob);
-            $age          = (date("Y") - date("Y", $dobTimestamp));
-            if ($age < 18) {
-                $dobError = "You must be at least 18 years old.";
-                $isValid  = false;
-            }
-        }
-
+        $isValid = validateFormData(
+            $firstName, $middleName, $lastName, $dob, $gender, $civil_status, $nationality, $religion,
+            $email, $tel, $number, $rm, $house, $street, $subdivision, $barangay, $city, $province,
+            $country, $zip, $rm_home, $house_home, $street_home, $subdivision_home, $barangay_home,
+            $city_home, $province_home, $country_home, $zip_home, $father_first_name, $father_middle_name,
+            $father_last_name, $mother_first_name, $mother_middle_name, $mother_last_name,
+            $firstNameError, $middleNameError, $lastNameError, $dobError, $genderError, $civil_statusError,
+            $nationalityError, $religionError, $emailError, $telError, $numberError, $rmError, $houseError,
+            $streetError, $subdivisionError, $barangayError, $cityError, $provinceError, $countryError,
+            $zipError, $rm_homeError, $house_homeError, $street_homeError, $subdivision_homeError,
+            $barangay_homeError, $city_homeError, $province_homeError, $country_homeError, $zip_homeError,
+            $father_first_nameError, $father_middle_nameError, $father_last_nameError, $mother_first_nameError,
+            $mother_middle_nameError, $mother_last_nameError
+        );
         // If valid, store data in session and redirect
         if ($isValid) {
             // Prepare and bind
@@ -481,7 +153,13 @@
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <div class="wrapper">
             <div class="container">
-                <h1>Personal Data</h1>
+            <div class="title" style="margin: 0 auto;">
+                    <h1>Insert Record</h1>
+                </div>
+                <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>Personal Data</h1>
+                    <button type="button" class="btn btn-secondary"><a href="index.php">Back</a></button>
+                </div> 
                 <div class="inputs">
                     <label for="last_name">Last Name</label> <br>
                     <input type="text" name="last_name" id="last_name"
@@ -769,14 +447,15 @@
                         placeholder="Enter your mother's middle name">
                     <span class="error"><?php echo $mother_middle_nameError; ?></span>
                 </div>
+                <div class="footer" style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </div>
-            <button type="submit">Submit</button>
         </div>
         </div>
     </form>
 </body>
-<script src="../fill.js"></script>
-<script src="../countries.js"></script>
+<script src="../js/countries.js"></script>
 
 <script></script>
 <script>
