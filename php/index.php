@@ -60,7 +60,7 @@
                             </form> -->
                             <div class="action-buttons" style="display: flex; gap: 10px;">
                                 <button class="edit-btn btn">
-                                    <a class="dropdown-item d-flex align-items-center" href="edit_record.php?id=<?php echo $row['id']; ?>">
+                                    <a class="dropdown-item d-flex align-items-center" href="update_record.php?id=<?php echo $row['id']; ?>">
                                         <i class="bi bi-pencil-fill me-2"></i>
                                         Edit
                                     </a>
