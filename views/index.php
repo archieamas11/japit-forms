@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +16,7 @@
     <div class="header">
         <h4>User Table</h4>
         <div class="header-button">
-            <a href="insert_record.php">
+            <a href="../views/insert_record.php?get_id=1">
                 <button class="btn btn-primary" id="add-new">Add New User</button>
             </a>
         </div>
@@ -66,13 +67,9 @@
                                     </a>
                                 </button>
 
-
-                                <form action="delete_user.php" method="POST"
-                                    onsubmit="return confirm('Are you sure?');">
-                                    <input type="hidden" name="user_id" value="<?php echo $row["id"]; ?>">
-                                    <button type="submit" class="btn delete-btn">
-                                    Delete
-                                    </button>
+                                <form action="../controllers/controllers.php" method="POST" onsubmit="return confirm('Are you sure?');">
+                                    <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+                                    <button type="submit" class="btn delete-btn">Delete</button>
                                 </form>
                             </div>          
                         </td>
@@ -86,8 +83,7 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="../js/edit-regions.js"></script>
-<script src="../js/modal.js"></script>
+<script src="../js/countries.js"></script>
 <script>
     $(document).ready(function() {
         $('#myTable').DataTable();
